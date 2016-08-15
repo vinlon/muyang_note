@@ -82,7 +82,7 @@ class NoteController extends BaseController
 				'title' => '成长日记',
 				'description' => '点击查看历史信息',
 				'image' => '',
-				'url' => 'http://ab.aikaka.com.cn/liwenlong/my_note/page/index.html?openid=' . $openid
+				'url' => 'http://ab.aikaka.com.cn/liwenlong/my_note/page/index.html#/tabs'
 			];
 		}
 		return '';
