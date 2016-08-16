@@ -34,15 +34,12 @@ class NoteController extends BaseController
 		$openid = $param['FromUserName'];
 
 		//检查用户注册信息
-		$user_status = $this->user->checkStatus($openid);
+		$user_status = $this->user->checkStatus($openid, $content);
 		switch ($user_status) {
 			case $this->user->user_status['STRANGER']:
 				return $this->success(['reply' => '挠挠：你是谁？']);
 				break;
 			case $this->user->user_status['ANONYMOUS']:
-				return $this->success(['reply' => '挠挠：你到底是谁？']);
-				break;
-			case $this->user->user_status['REGISTERED']:
 				return $this->success(['reply' => '挠挠：要【爸爸】同意我才能和你玩...']);
 				break;
 		}

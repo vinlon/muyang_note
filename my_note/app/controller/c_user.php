@@ -19,8 +19,7 @@ class UserController extends BaseController{
         $this->user_status = [
             'STRANGER' => -10,
             'ANONYMOUS' => 0,
-            'REGISTERED' => 10,
-            'APPROVED' => 20
+            'APPROVED' => 10
         ];
     }
 
@@ -30,14 +29,38 @@ class UserController extends BaseController{
      * @param  string $openid 用户标识
      * @return int status
      */
-    public function checkStatus($openid){
+    public function checkStatus($openid, $content = ''){
         $redis_user_key = 'user:' . $openid;
         $status = $this->redis1->hget($redis_user_key, 'status');
         if($status === NULL){
             //匿名用户
+            $this->redis1->hset($redis_user_key, 'status', $this->user_status['ANONYMOUS']);
+            $this->redis1->hset($redis_user_key, 'comment', $content);
             return $this->user_status['STRANGER'];
         }
-        return array_search($status, $this->user_status);
+        return intval($status);
+    }
+
+    /**
+     * 通过用户申请
+     * @param  array $param [ openid \ name]
+     */
+    public function setName($param){
+        //身份验证
+        $this->authenticate();
+
+        //检查参数
+        $this->checkParam(['openid', 'name'], $param);
+
+        $openid = $param['openid'];
+        $name = $param['name'];
+
+        $redis_user_key = 'user:' . $openid;
+        //更新用户信息
+        $this->redis1->hset($redis_user_key, 'status', $this->user_status['APPROVED']);
+        $this->redis1->hset($redis_user_key, 'name', $name);
+
+        return $this->success();
     }
 }
 
