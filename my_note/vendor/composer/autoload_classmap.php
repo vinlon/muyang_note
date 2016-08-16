@@ -9,6 +9,7 @@ return array(
     'Controller\\BaseController' => $baseDir . '/app/controller/c_base.php',
     'Controller\\Invoker' => $baseDir . '/app/controller/invoker.php',
     'Controller\\NoteController' => $baseDir . '/app/controller/c_note.php',
+    'Controller\\UserController' => $baseDir . '/app/controller/c_user.php',
     'Model\\BaseModel' => $baseDir . '/app/model/m_base.php',
     'R' => $baseDir . '/app/model/rb.php',
     'RedBeanPHP\\Adapter' => $baseDir . '/app/model/rb.php',

@@ -17,6 +17,7 @@ class NoteController extends BaseController
 	 */
 	public function __construct(){
         $this->redis1 = $this->getRedis(1);
+        $this->user = new UserController();
     }
 
     /**
@@ -31,6 +32,20 @@ class NoteController extends BaseController
 
 		$content = $param['Content'];
 		$openid = $param['FromUserName'];
+
+		//检查用户注册信息
+		$user_status = $this->user->checkStatus($openid);
+		switch ($user_status) {
+			case $this->user->user_status['STRANGER']:
+				return $this->success(['reply' => '挠挠：你是谁？']);
+				break;
+			case $this->user->user_status['ANONYMOUS']:
+				return $this->success(['reply' => '挠挠：你到底是谁？']);
+				break;
+			case $this->user->user_status['REGISTERED']:
+				return $this->success(['reply' => '挠挠：要【爸爸】同意我才能和你玩...']);
+				break;
+		}
 
 		//处理关键字
 		//TODO
@@ -80,9 +95,9 @@ class NoteController extends BaseController
 			return [
 				'type' => 'news',
 				'title' => '成长日记',
-				'description' => '点击查看历史信息',
+				'description' => '点击查看成长日志',
 				'image' => '',
-				'url' => 'http://ab.aikaka.com.cn/liwenlong/my_note/page/index.html#/tabs'
+				'url' => 'http://ab.aikaka.com.cn/liwenlong/my_note/page/index.html#/'
 			];
 		}
 		return '';

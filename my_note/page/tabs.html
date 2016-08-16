@@ -3,37 +3,34 @@
 </div>
 
 <div class="scrollable">
-  <div class="scrollable-content">
-    <div class='section'>
-      <ui-state id='activeTab' default='1'></ui-state>
+    <div class='scrollable-content section'>
+      <ui-state id='activeTab' default='text'></ui-state>
 
       <ul class="nav nav-tabs">
-        <li ui-class="{'active': activeTab == 1}">
-          <a ui-set="{'activeTab': 1}">日志</a>
+        <li ui-class="{'active': activeTab == 'text'}">
+          <a ui-set="{'activeTab': 'text'}">日志</a>
         </li>
-        <li ui-class="{'active': activeTab == 2}">
-          <a ui-set="{'activeTab': 2}">图片</a>
+        <li ui-class="{'active': activeTab == 'image'}">
+          <a ui-set="{'activeTab': 'image'}">图片</a>
         </li>
-        <li ui-class="{'active': activeTab == 3}">
-          <a ui-set="{'activeTab': 3}">语音</a>
+        <li ui-class="{'active': activeTab == 'voice'}">
+          <a ui-set="{'activeTab': 'voice'}">语音</a>
         </li>
       </ul>
 
-      <div ui-if="activeTab == 1">
-        <h3 class="page-header">日志</h3>
+      <div ui-if="activeTab == 'text'">
+        <p class="page-header">最新记录的日志</p>
         <p>{{lorem}}</p>
       </div>
 
-      <div ui-if="activeTab == 2">
-        <h3 class="page-header">图片</h3>
+      <div ui-if="activeTab == 'image'">
+        <p class="page-header">直接显示图片库</p>
         <p>{{lorem}}</p>
       </div>
 
-      <div ui-if="activeTab == 3">
-        <h3 class="page-header">语音</h3>
+      <div ui-if="activeTab == 'voice'">
+        <p class="page-header">最新记录的语音</p>
         <p>{{lorem}}</p>
       </div> 
     </div>
-
-  </div>
 </div>
