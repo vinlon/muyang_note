@@ -5,6 +5,7 @@
 
 include __DIR__ . '/vendor/autoload.php'; // 引入 composer 入口文件
 
+date_default_timezone_set('PRC'); //设置中国时区
 //error handle
 require "app/error_handler.php";
 
@@ -19,7 +20,7 @@ $options = [
     'aes_key' => AES_KEY, // 可选
     'log' => [
         'level' => 'debug',
-        'file'  => __DIR__.'/logs/easywechat/debug.log',
+        'file'  => __DIR__.'/logs/easywechat/server.log',
     ]
 ];
 

@@ -6,7 +6,6 @@
 namespace Controller;
 
 use CustomError;
-use EasyWeChat\Foundation\Application;
 use EasyWeChat\Message\News;
 use Exception;
 /**
@@ -25,6 +24,7 @@ class MessageController extends BaseController{
      */
     public function handle($message){
         $msg_type = $message->MsgType;
+        
         //查看事件的注册列表
         $redis_handler_key = 'message_handler';
         $handler = $this->redis0->hget($redis_handler_key, $msg_type);

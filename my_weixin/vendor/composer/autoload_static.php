@@ -150,6 +150,7 @@ class ComposerStaticInitaf4e9d1cbccea3eaaa580d86f123f2fa
         'Controller\\BaseController' => __DIR__ . '/../..' . '/app/controller/c_base.php',
         'Controller\\Invoker' => __DIR__ . '/../..' . '/app/controller/invoker.php',
         'Controller\\MessageController' => __DIR__ . '/../..' . '/app/controller/c_message.php',
+        'Controller\\UserController' => __DIR__ . '/../..' . '/app/controller/c_user.php',
         'Model\\BaseModel' => __DIR__ . '/../..' . '/app/model/m_base.php',
         'R' => __DIR__ . '/../..' . '/app/model/rb.php',
         'RedBeanPHP\\Adapter' => __DIR__ . '/../..' . '/app/model/rb.php',

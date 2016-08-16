@@ -1,6 +1,7 @@
 <?php
 
 require "r_message.php";
+require "r_user.php";
 
 //Middleware：在接口主体执行的前后添加验证和统计功能
 $app->add(new Controller\Invoker());
