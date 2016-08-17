@@ -1,4 +1,4 @@
-<?php  
+<?php
 /**
  * Note User
  */
@@ -9,8 +9,9 @@ namespace Controller;
 * 用户管理
 */
 class UserController extends BaseController{
-
-    
+    const REDIS_MUYANG_KEY = 'muyang';
+    const REDIS_USER_PREFIX = 'user:';
+    const REDIS_MUYANG_BIRTHDAY_FIELD = 'birthday';
     /**
      * 构造函数
      */
@@ -30,7 +31,7 @@ class UserController extends BaseController{
      * @return int status
      */
     public function checkStatus($openid, $content = ''){
-        $redis_user_key = 'user:' . $openid;
+        $redis_user_key = self::REDIS_USER_PREFIX . $openid;
         $status = $this->redis1->hget($redis_user_key, 'status');
         if($status === NULL){
             //匿名用户
@@ -55,12 +56,71 @@ class UserController extends BaseController{
         $openid = $param['openid'];
         $name = $param['name'];
 
-        $redis_user_key = 'user:' . $openid;
+        $redis_user_key = self::REDIS_USER_PREFIX . $openid;
         //更新用户信息
         $this->redis1->hset($redis_user_key, 'status', $this->user_status['APPROVED']);
         $this->redis1->hset($redis_user_key, 'name', $name);
 
         return $this->success();
+    }
+
+    /**
+     * 获取沐阳的个人信息
+     */
+    public function getMuYangProfile($param){
+        //身份验证
+        $this->authenticate();
+
+        //查询单条信息
+        if(isset($param['field'])){
+            $field = $param['field'];
+            $profile = $this->redis1->hget(self::REDIS_MUYANG_KEY, $field);
+            if($profile === null){
+                $profile = '';
+            }
+            return $this->success([ $field => $profile]);
+        }
+
+        $profiles = $this->redis1->hgetall(self::REDIS_MUYANG_KEY);
+        return $this->success($profiles);
+    }
+
+    /**
+     * 设置沐阳的个人信息
+     */
+    public function setMuYangProfile($param){
+        //身份验证
+        $this->authenticate();
+
+        //检查参数
+        $this->checkParam(['field', 'value'], $param);
+
+        $this->redis1->hset(self::REDIS_MUYANG_KEY, $param['field'], $param['value']);
+        $this->redis1->hset(self::REDIS_MUYANG_KEY, 'last_update_time', date('Y-m-d H:i:s', time()));
+
+        return $this->success();
+    }
+
+    /**
+     * 获取Age信息
+     */
+    public function getMuYangAge($param){
+        //身份验证
+        $this->authenticate();
+
+        $birthday = $this->redis1->hget(self::REDIS_MUYANG_KEY, self::REDIS_MUYANG_BIRTHDAY_FIELD);
+
+        $age_timestamp = time() - strtotime($birthday);
+
+        $day = floor($age_timestamp / (60*60*24));
+        $hour = floor(($age_timestamp % (60*60*24))/(60*60));
+        $minutes = floor(($age_timestamp % (60*60))/(60));
+
+        return $this->success([
+            'day' => $day,
+            'hour' => $hour,
+            'minutes' => $minutes
+        ]);
     }
 }
 
