@@ -65,6 +65,15 @@ class UserController extends BaseController{
     }
 
     /**
+     * 查询用户名称
+     */
+    public function getName($openid){
+        $redis_user_key = self::REDIS_USER_PREFIX . $openid;
+        $name = $this->redis1->hget($redis_user_key, 'name');
+        return $name;
+    }
+
+    /**
      * 获取沐阳的个人信息
      */
     public function getMuYangProfile($param){

@@ -21,13 +21,19 @@ $app->group('/note/', function(){
     $note = new NoteController();
 
     //获取文本日志列表
-    $this->post("textList", function($request, $response) use ($note){
+    $this->post('textList', function($request, $response) use ($note){
         $param = $request->getParsedBody();
         $result = $note->getTextList($param);
         return $response->withJson($result, 200, JSON_NUMERIC_CHECK);
     });
-});
 
+    //获取所有用户的最新动态
+    $this->get('latest', function($request, $response) use ($note){
+        $param = $_GET;
+        $result = $note->getLatest($param);
+        return $response->withJson($result, 200, JSON_NUMERIC_CHECK);
+    });
+});
 
 
 ?>

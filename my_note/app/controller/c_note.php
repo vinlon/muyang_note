@@ -12,6 +12,7 @@ use CustomError;
  */
 class NoteController extends BaseController
 {
+	const REDIS_LATEST_NOTE_KEY = 'latest_note';
 	/**
 	 * 构造函数
 	 */
@@ -53,7 +54,15 @@ class NoteController extends BaseController
 		}
 
 		$redis_text_note_key = 'text_note:' . $openid;
-		$this->redis1->hset($redis_text_note_key, time(), $content);
+		$now = time();
+		$this->redis1->hset($redis_text_note_key, $now, $content);
+
+		//添加到最新动态
+		$this->redis1->hset(self::REDIS_LATEST_NOTE_KEY, $openid, json_encode([
+			'timestamp' => $now,
+			'type' => 'text',
+			'content' => $content
+		]));
 
 		$reply = $this->getDynamicReply($openid);
 
@@ -75,6 +84,32 @@ class NoteController extends BaseController
 		$redis_text_note_key = 'text_note:' . $openid;
 
 		$result = $this->redis1->hgetall($redis_text_note_key);
+
+		return $this->success($result);
+	}
+
+	/**
+	 * 获取所有用户的最新日志
+	 */
+	public function getLatest(){
+		//身份验证
+		$this->authenticate();
+
+		$latest_notes = $this->redis1->hgetall(self::REDIS_LATEST_NOTE_KEY);
+
+		$result = [];
+		//获取用户名称
+		foreach ($latest_notes as $openid => $note_json) {
+			$item['openid'] = $openid;
+			$name = $this->user->GetName($openid);
+			$item['name'] = $name;
+			$note = json_decode($note_json, true);
+			$item['publish_time'] = date('Y-m-d H:i:s',$note['timestamp']);
+			$item['type'] = $note['type'];
+			$item['content'] = $note['content'];
+
+			$result[] = $item;
+		}
 
 		return $this->success($result);
 	}
