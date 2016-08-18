@@ -98,6 +98,7 @@ class NoteController extends BaseController
 		$latest_notes = $this->redis1->hgetall(self::REDIS_LATEST_NOTE_KEY);
 
 		$result = [];
+		$time_series = [];
 		//获取用户名称
 		foreach ($latest_notes as $openid => $note_json) {
 			$item['openid'] = $openid;
@@ -108,8 +109,12 @@ class NoteController extends BaseController
 			$item['type'] = $note['type'];
 			$item['content'] = $note['content'];
 
+			$time_series[] = $note['timestamp'];
 			$result[] = $item;
 		}
+
+		//按发表时间排序
+		array_multisort($time_series, SORT_DESC, $result);
 
 		return $this->success($result);
 	}
