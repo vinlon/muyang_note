@@ -24,6 +24,7 @@
                         </a>
                         <ul ui-state="myDropdown{{index}}" class="dropdown-menu" ui-outer-click="Ui.turnOff('myDropdown' + index)" ui-outer-click-if="Ui.active('myDropdown' + index)" role="menu" ui-show="myDropdown{{index}}" ui-turn-off="myDropdown{{index}}">
                             <li><a ng-click='textDel(note)'>删除</a></li>
+                            <li class="divider"></li>
                             <li><a>修改</a></li>
                         </ul>
                     </div>
