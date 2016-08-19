@@ -69,6 +69,29 @@ class NoteController extends BaseController
        	return $this->success($reply);
     }
 
+
+
+	/**
+	 * 备忘添加成功后自动生成回复
+	 */
+	private function getDynamicReply($openid){
+		$redis_visit_record = 'visit_count:' . $openid;
+		$visit_count = $this->redis1->incrby($redis_visit_record, 1);
+		//空闲10分钟则重新记录
+		$this->redis1->expire($redis_visit_record, 10*60);
+		if($visit_count === 1 || $visit_count % 5 === 0){
+			//第一次回复和每5次间隔
+			return [
+				'type' => 'news',
+				'title' => '成长日记',
+				'description' => '点击查看成长日志',
+				'image' => '',
+				'url' => 'http://ab.aikaka.com.cn/liwenlong/my_note/page/index.html#/note?openid=' . $openid
+			];
+		}
+		return '';
+	}
+
 	/**
 	 * 获取文本日志列表
 	 */
@@ -159,27 +182,6 @@ class NoteController extends BaseController
 		array_multisort($time_series, SORT_DESC, $result);
 
 		return $this->success($result);
-	}
-
-	/**
-	 * 备忘添加成功后自动生成回复
-	 */
-	private function getDynamicReply($openid){
-		$redis_visit_record = 'visit_count:' . $openid;
-		$visit_count = $this->redis1->incrby($redis_visit_record, 1);
-		//空闲10分钟则重新记录
-		$this->redis1->expire($redis_visit_record, 10*60);
-		if($visit_count === 1 || $visit_count % 5 === 0){
-			//第一次回复和每5次间隔
-			return [
-				'type' => 'news',
-				'title' => '成长日记',
-				'description' => '点击查看成长日志',
-				'image' => '',
-				'url' => 'http://ab.aikaka.com.cn/liwenlong/my_note/page/index.html#/'
-			];
-		}
-		return '';
 	}
 
 	/**
