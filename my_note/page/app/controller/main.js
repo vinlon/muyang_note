@@ -2,7 +2,7 @@
 // For this trivial demo we have just a unique MainController 
 // for everything
 //
-app.controller('MainController', function($rootScope, $scope) {
+app.controller('MainCtrl', function($rootScope, $scope) {
 
     $scope.swiped = function(direction) {
         alert('Swiped ' + direction);

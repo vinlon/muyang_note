@@ -83,9 +83,51 @@ class NoteController extends BaseController
 
 		$redis_text_note_key = 'text_note:' . $openid;
 
-		$result = $this->redis1->hgetall($redis_text_note_key);
+		$note_list = $this->redis1->hgetall($redis_text_note_key);
+
+		//按时间排序
+		krsort($note_list);
+
+		$result = [];
+		foreach ($note_list as $timestamp => $content) {
+			$item['friend_time']  = $this->getFriendTime($timestamp);
+			$item['key'] = $timestamp;
+			$item['content'] = $content;
+			$result[] = $item;
+		}
 
 		return $this->success($result);
+	}
+
+	/**
+	 * 获取友好显示的时间
+	 */
+	private function getFriendTime($timestamp){
+		$now = time();
+		$duration = $now - $timestamp;
+		$one_day = 60*60*24;
+		$one_hour = 60*60;
+		$one_minute = 60;
+		if($duration > $one_day*2){
+			//大于2天直接显示日期
+			return date('Y-m-d', $timestamp);
+		}else if($duration > $one_day){
+			//大于1天显示n天前
+			$day = floor($duration / $one_day);
+			return $day . '天前';
+		}else if($duration > $one_hour){
+			//大于1小时显示n小时前
+			$hour = floor($duration / $one_hour);
+			return $hour . '小时前';
+		}else if($duration > $one_minute){
+			//大于1分钟显示 n 分钟前
+			$minutes = floor($duration / $one_minute);
+			return $minutes . '分钟前';
+		}else{
+			return '刚刚';
+		}
+
+
 	}
 
 	/**
@@ -105,7 +147,7 @@ class NoteController extends BaseController
 			$name = $this->user->GetName($openid);
 			$item['name'] = $name;
 			$note = json_decode($note_json, true);
-			$item['publish_time'] = date('Y-m-d H:i:s',$note['timestamp']);
+			$item['publish_time'] = date('Y-m-d H:i:s', $note['timestamp']);
 			$item['type'] = $note['type'];
 			$item['content'] = $note['content'];
 
@@ -138,5 +180,31 @@ class NoteController extends BaseController
 			];
 		}
 		return '';
+	}
+
+	/**
+	 * 删除记录
+	 */
+	public function delete($param){
+		//身份验证
+		$this->authenticate();
+
+    	//检查参数
+        $this->checkParam(['openid', 'key', 'type'], $param);
+
+        $type = $param['type'];
+
+        switch ($type) {
+        	case 'text':
+        		$redis_text_note_key = 'text_note:' . $param['openid'];
+				$this->redis1->hdel($redis_text_note_key, $param['key']);
+				return $this->success();
+        		break;
+        	
+        	default:
+        		
+        		break;
+        }
+
 	}
 }

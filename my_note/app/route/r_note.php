@@ -33,6 +33,13 @@ $app->group('/note/', function(){
         $result = $note->getLatest($param);
         return $response->withJson($result, 200, JSON_NUMERIC_CHECK);
     });
+
+    //删除记录
+     $this->post('delete', function($request, $response) use ($note){
+        $param = $request->getParsedBody();
+        $result = $note->delete($param);
+        return $response->withJson($result, 200, JSON_NUMERIC_CHECK);
+    });
 });
 
 

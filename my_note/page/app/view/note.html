@@ -1,36 +1,46 @@
 <div ui-content-for="title">
-  <span>成长日记</span>
+    <span>成长日记</span>
 </div>
-
-<div class="scrollable">
+<div class="scrollable" ng-controller="NoteCtrl">
     <div class='scrollable-content section'>
-      <ui-state id='activeTab' default=1></ui-state>
-
-      <ul class="nav nav-tabs">
-        <li ui-class="{'active': activeTab == 1}">
-          <a ui-set="{'activeTab': 1}">日志</a>
-        </li>
-        <li ui-class="{'active': activeTab == 2}">
-          <a ui-set="{'activeTab': 2}">图片</a>
-        </li>
-        <li ui-class="{'active': activeTab == 3}">
-          <a ui-set="{'activeTab': 3}">语音</a>
-        </li>
-      </ul>
-
-      <div ui-if="activeTab == 1">
-        <p class="page-header">最新记录的日志</p>
-        <p>{{lorem}}</p>
-      </div>
-
-      <div ui-if="activeTab == 2">
-        <p class="page-header">直接显示图片库</p>
-        <p>{{lorem}}</p>
-      </div>
-
-      <div ui-if="activeTab == 3">
-        <p class="page-header">最新记录的语音</p>
-        <p>{{lorem}}</p>
-      </div> 
+        <ui-state id='activeTab' default=1></ui-state>
+        <ul class="nav nav-tabs">
+            <li ui-class="{'active': activeTab == 1}">
+                <a ui-set="{'activeTab': 1}">日志</a>
+            </li>
+            <li ui-class="{'active': activeTab == 2}">
+                <a ui-set="{'activeTab': 2}">图片</a>
+            </li>
+            <li ui-class="{'active': activeTab == 3}">
+                <a ui-set="{'activeTab': 3}">语音</a>
+            </li>
+        </ul>
+        <div ui-if="activeTab == 1">
+            <div class="list-group">
+                <div class="list-group-item list-group-item" ng-repeat="(index,note) in text_list">
+                    <div class="btn-group pull-right">
+                        <a ui-turn-on='myDropdown{{index}}' class='btn'>
+                            <i class="fa fa-ellipsis-v"></i>
+                        </a>
+                        <ul ui-state="myDropdown{{index}}" class="dropdown-menu" ui-outer-click="Ui.turnOff('myDropdown' + index)" ui-outer-click-if="Ui.active('myDropdown' + index)" role="menu" ui-show="myDropdown{{index}}" ui-turn-off="myDropdown{{index}}">
+                            <li><a ng-click='textDel(note)'>删除</a></li>
+                            <li><a>修改</a></li>
+                        </ul>
+                    </div>
+                    <p class="text-left text-info">
+                        <small>发表于 {{note.friend_time}}</small>
+                    </p>
+                    <p>{{note.content}}</p>
+                </div>
+            </div>
+        </div>
+        <div ui-if="activeTab == 2">
+            <p class="page-header">直接显示图片库</p>
+            <p>{{lorem}}</p>
+        </div>
+        <div ui-if="activeTab == 3">
+            <p class="page-header">最新记录的语音</p>
+            <p>{{lorem}}</p>
+        </div>
     </div>
 </div>
