@@ -46,6 +46,13 @@ $app->group('/note/', function(){
         $result = $note->delete($param);
         return $response->withJson($result, 200, JSON_NUMERIC_CHECK);
     });
+
+     //测试
+     $this->post('test', function($request, $response) use ($note){
+        $param = $request->getParsedBody();
+        $result = $note->test($param);
+        return $response->withJson($result, 200, JSON_NUMERIC_CHECK);
+     });
 });
 
 

@@ -21,14 +21,15 @@ var app = angular.module('MobileAngularUiExamples', [
 
 //定义全局变量
 .constant('GLOBAL', {
-    "API_HOST": "../",
-    "SUCCESS_CODE": 200
+    'API_HOST': '../',
+    'SUCCESS_CODE': 200,
+    'IMAGE_HOST': '../'
 })
 
 //httpProvider默认设置
 .run(function($http) {
     //设置接口请求需要的ticket
-    $http.defaults.headers.common = { "ticket": 'limuyang' };
+    $http.defaults.headers.common = { 'ticket': 'limuyang' };
     //指定Post数据格式
-    $http.defaults.headers.post = { "Content-Type": "application/json" };
+    $http.defaults.headers.post = { 'Content-Type': 'application/json' };
 })

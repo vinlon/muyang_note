@@ -14,7 +14,7 @@
                         {{note.content}}
                     </p>
                     <p ng-if="note.type=='image'">
-                        <img style="width:100%" ng-src="{{note.content}}">
+                        <img style="width:100%" ng-src="{{IMAGE_HOST + note.content}}">
                     </p>
                 </div>
             </div>

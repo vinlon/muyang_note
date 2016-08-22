@@ -10,7 +10,7 @@ app.controller('HomeCtrl', ['$rootScope', '$scope', 'userService', 'noteService'
     });
 
     //获取最新动态
-    
+    $scope.IMAGE_HOST = g.IMAGE_HOST;
     note.getLatest().then(function(response){
         if (response.data.return_code == g.SUCCESS_CODE) {
             $scope.latest = response.data.data;

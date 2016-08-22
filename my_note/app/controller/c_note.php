@@ -93,15 +93,27 @@ class NoteController extends BaseController
 				break;
 		}
 
+		//保存图片
+		$root = __DIR__ . '/../../';
+		$path = 'media/image/' . date('Y',time()) . '/' . date('m', time()) . '/';
+		$file_name = uniqid() . '.jpg';
+		if(!is_dir($root . $path)){
+			mkdir($root . $path, 0777, true);
+		}
+
+		$stream = file_get_contents($pic_url);
+		file_put_contents($root . $path . $file_name, $stream);
+
+		$file_path = $path . $file_name;
 		$redis_image_note_key = 'image_note:' . $openid;
 		$now = time();
-		$this->redis1->hset($redis_image_note_key, $now, $pic_url);
+		$this->redis1->hset($redis_image_note_key, $now, $file_path);
 
 		//添加到最新动态
 		$this->redis1->hset(self::REDIS_LATEST_NOTE_KEY, $openid, json_encode([
 			'timestamp' => $now,
 			'type' => 'image',
-			'content' => $pic_url
+			'content' => $file_path
 		]));
 
 		$reply = $this->getDynamicReply($openid);
@@ -248,5 +260,10 @@ class NoteController extends BaseController
         		break;
         }
 
+	}
+
+
+	public function test($param){
+		
 	}
 }
