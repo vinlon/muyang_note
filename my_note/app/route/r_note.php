@@ -13,6 +13,12 @@ $app->group('/handle/', function(){
         $result = $note->handleText($param);
         return $response->withJson($result, 200, JSON_NUMERIC_CHECK);
     });
+    //处理图片信息
+    $this->post('image', function($request, $response) use ($note){
+        $param = $request->getParsedBody();
+        $result = $note->handleImage($param);
+        return $response->withJson($result, 200, JSON_NUMERIC_CHECK);
+    });
 
 
 });

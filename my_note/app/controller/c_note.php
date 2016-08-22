@@ -69,6 +69,46 @@ class NoteController extends BaseController
        	return $this->success($reply);
     }
 
+    /**
+     * 处理图片消息 
+     */
+    public function handleImage($param){
+		//身份验证
+		$this->authenticate();
+
+    	//检查参数
+        $this->checkParam(['FromUserName', 'PicUrl'], $param);
+
+		$pic_url = $param['PicUrl'];
+		$openid = $param['FromUserName'];
+
+		//检查用户注册信息
+		$user_status = $this->user->checkStatus($openid, 'image');
+		switch ($user_status) {
+			case $this->user->user_status['STRANGER']:
+				return $this->success(['reply' => '挠挠：你是谁？']);
+				break;
+			case $this->user->user_status['ANONYMOUS']:
+				return $this->success(['reply' => '挠挠：要【爸爸】同意我才能和你玩...']);
+				break;
+		}
+
+		$redis_image_note_key = 'image_note:' . $openid;
+		$now = time();
+		$this->redis1->hset($redis_image_note_key, $now, $pic_url);
+
+		//添加到最新动态
+		$this->redis1->hset(self::REDIS_LATEST_NOTE_KEY, $openid, json_encode([
+			'timestamp' => $now,
+			'type' => 'image',
+			'content' => $pic_url
+		]));
+
+		$reply = $this->getDynamicReply($openid);
+
+       	return $this->success($reply);
+    }
+
 
 
 	/**
@@ -86,7 +126,7 @@ class NoteController extends BaseController
 				'title' => '成长日记',
 				'description' => '点击查看成长日志',
 				'image' => '',
-				'url' => 'http://ab.aikaka.com.cn/liwenlong/my_note/page/index.html#/note?openid=' . $openid
+				'url' => 'http://ab.aikaka.com.cn/liwenlong/my_note/page/index.html#/'
 			];
 		}
 		return '';

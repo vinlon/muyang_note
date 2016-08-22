@@ -10,8 +10,11 @@
                     <p class="text-left lead text-info">
                         <strong>{{note.name}}</strong> <small>发表于 {{note.publish_time}}</small>
                     </p>
-                    <p>
-                        <h3 class="home-heading">{{note.content}}</h3>
+                    <p ng-if="note.type=='text'">
+                        {{note.content}}
+                    </p>
+                    <p ng-if="note.type=='image'">
+                        <img style="width:100%" ng-src="{{note.content}}">
                     </p>
                 </div>
             </div>
