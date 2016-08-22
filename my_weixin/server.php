@@ -26,9 +26,9 @@ $options = [
 
 $app = new Application($options);
 
-$message = json_decode('{"ToUserName":"gh_a5762ca08dd6","FromUserName":"oJpdNxL7ViIFHcPKxn2cu8-yXA-w","CreateTime":"1471100882","MsgType":"text","Content":"挠挠：少于20个【字节】就不用我帮忙了吧。。。","MsgId":"6318330177712806282"}');
-$message_handler = new MessageController();
-var_dump($message_handler->handle($message));exit;
+// $message = json_decode('{"ToUserName":"gh_a5762ca08dd6","FromUserName":"oJpdNxL7ViIFHcPKxn2cu8-yXA-w","CreateTime":"1471860154","MsgType":"image","PicUrl":"http://mmbiz.qpic.cn/mmbiz_jpg/KPR8ViaBujcicHMVzA4wRXBlr1Y4ibsc31hA87clicTtXhanQl5o01MekViaommicwicqkBJgBecPOvd3qiaRrxqB4Zxng/0","MsgId":"6321591226121660057","MediaId":"OatpMi0OGXvJcu53Zo88jWjuX7pRlrgZ0dXvvIai77IY8GpTSSJ2NSPevdXekuN_"}');
+// $message_handler = new MessageController();
+// var_dump($message_handler->handle($message));exit;
 
 //接收 & 回复用户消息
 $app->server->setMessageHandler(function ($message) {
