@@ -13,13 +13,13 @@
                 <strong>{{note.name}}</strong> <small>发表于 {{note.timestamp * 1000 |  date:'yyyy-MM-dd HH:mm:ss'}}</small>
             </p>
             <h4 class="text-left text-success" ng-if="note.type=='text'">
-                        {{note.content}}
-                    </h4>
+                {{note.content}}
+            </h4>
             <p ng-if="note.type=='image'">
                 <img class="img-polaroid" style="width:100%" ng-src="{{IMAGE_HOST + note.image_path}}">
                 <h5 class="text-left text-success">
-                            {{note.comment}}
-                        </h5>
+                    {{note.comment}}
+                </h5>
             </p>
         </div>
     </div>
