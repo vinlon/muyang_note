@@ -13,6 +13,8 @@ use CustomError;
 class NoteController extends BaseController
 {
 	const REDIS_LATEST_NOTE_KEY = 'latest_note';
+	const REDIS_IMAGE_NOTE_PREFIX = 'image_note:';
+	const REDIS_IMAGE_WAITING_COMMENT_PREFIX = 'image_note:waiting:';
 	/**
 	 * 构造函数
 	 */
@@ -53,16 +55,23 @@ class NoteController extends BaseController
 			return $this->success(['reply' => '挠挠：少于5个字就太没有诚意了哦。。。']);
 		}
 
-		$redis_text_note_key = 'text_note:' . $openid;
-		$now = time();
-		$this->redis1->hset($redis_text_note_key, $now, $content);
+		//判断文字信息是否为图片的备注
+		$redis_image_waiting_comment_key = self::REDIS_IMAGE_WAITING_COMMENT_PREFIX . $openid;
+		$image_key = $this->redis1->get($redis_image_waiting_comment_key);
+		if($image_key){
+			$this->addImageComment($openid, $image_key, $content);
+		}else{
+			$redis_text_note_key = 'text_note:' . $openid;
+			$now = time();
+			$this->redis1->hset($redis_text_note_key, $now, $content);
 
-		//添加到最新动态
-		$this->redis1->hset(self::REDIS_LATEST_NOTE_KEY, $openid, json_encode([
-			'timestamp' => $now,
-			'type' => 'text',
-			'content' => $content
-		]));
+			//添加到最新动态
+			$this->redis1->hset(self::REDIS_LATEST_NOTE_KEY, $openid, json_encode([
+				'timestamp' => $now,
+				'type' => 'text',
+				'content' => $content
+			]));
+		}
 
 		$reply = $this->getDynamicReply($openid);
 
@@ -105,15 +114,24 @@ class NoteController extends BaseController
 		file_put_contents($root . $path . $file_name, $stream);
 
 		$file_path = $path . $file_name;
-		$redis_image_note_key = 'image_note:' . $openid;
+		$value = json_encode([
+			'image_path' => $file_path,
+			'comment' => ''
+		]);
+		$redis_image_note_key = self::REDIS_IMAGE_NOTE_PREFIX  . $openid;
 		$now = time();
-		$this->redis1->hset($redis_image_note_key, $now, $file_path);
+		$this->redis1->hset($redis_image_note_key, $now, $value);
+
+		//1分钟内接收到的文本信息作为该图片的描述
+		$redis_image_waiting_comment_key = self::REDIS_IMAGE_WAITING_COMMENT_PREFIX . $openid;
+		$this->redis1->setex($redis_image_waiting_comment_key, 60, $now);
 
 		//添加到最新动态
 		$this->redis1->hset(self::REDIS_LATEST_NOTE_KEY, $openid, json_encode([
 			'timestamp' => $now,
 			'type' => 'image',
-			'content' => $file_path
+			'image_path' => $file_path,
+			'comment' => ''
 		]));
 
 		$reply = $this->getDynamicReply($openid);
@@ -121,7 +139,25 @@ class NoteController extends BaseController
        	return $this->success($reply);
     }
 
-
+    /**
+     * 添加图片备注
+     */
+    private function addImageComment($openid, $image_key, $comment){
+    	//更新图片备注
+		$redis_image_note_key = self::REDIS_IMAGE_NOTE_PREFIX  . $openid;
+		$image_note_json = $this->redis1->hget($redis_image_note_key, $image_key);
+		$image_note = json_decode($image_note_json, true);
+		$image_note['comment'] = $comment;
+		$this->redis1->hset($redis_image_note_key, $image_key, json_encode($image_note));
+		 
+		 //更新最新动态
+		$this->redis1->hset(self::REDIS_LATEST_NOTE_KEY, $openid, json_encode([
+			'timestamp' => time(),
+			'type' => 'image',
+			'image_path' => $image_note['image_path'],
+			'comment' => $comment
+		]));
+    }
 
 	/**
 	 * 备忘添加成功后自动生成回复
@@ -218,13 +254,12 @@ class NoteController extends BaseController
 		$time_series = [];
 		//获取用户名称
 		foreach ($latest_notes as $openid => $note_json) {
+			$item = [];
 			$item['openid'] = $openid;
 			$name = $this->user->GetName($openid);
 			$item['name'] = $name;
 			$note = json_decode($note_json, true);
-			$item['publish_time'] = date('Y-m-d H:i:s', $note['timestamp']);
-			$item['type'] = $note['type'];
-			$item['content'] = $note['content'];
+			$item = array_merge($item, $note);
 
 			$time_series[] = $note['timestamp'];
 			$result[] = $item;

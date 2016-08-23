@@ -8,13 +8,16 @@
                 </div>
                 <div class="list-group-item list-group-item-home" ng-repeat="note in latest">
                     <p class="text-left lead text-info">
-                        <strong>{{note.name}}</strong> <small>发表于 {{note.publish_time}}</small>
+                        <strong>{{note.name}}</strong> <small>发表于 {{note.timestamp * 1000 |  date:'yyyy-MM-dd HH:mm:ss'}}</small>
                     </p>
-                    <p ng-if="note.type=='text'">
+                    <h4 class="text-left text-success" ng-if="note.type=='text'">
                         {{note.content}}
-                    </p>
+                    </h4>
                     <p ng-if="note.type=='image'">
-                        <img style="width:100%" ng-src="{{IMAGE_HOST + note.content}}">
+                        <img class="img-polaroid" style="width:100%" ng-src="{{IMAGE_HOST + note.image_path}}">
+                        <h5 class="text-left text-success">
+                            {{note.comment}}
+                        </h5>
                     </p>
                 </div>
             </div>
