@@ -134,7 +134,7 @@ class NoteController extends BaseController
 			'comment' => ''
 		]));
 
-		$reply = $this->getDynamicReply($openid);
+		$reply = ['reply' => '挠挠：可以给图片添加备注哦...'];
 
        	return $this->success($reply);
     }

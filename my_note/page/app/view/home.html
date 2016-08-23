@@ -1,25 +1,26 @@
 <div class="scrollable" ng-controller="HomeCtrl">
-    <div class="scrollable-content">
-        <div class="list-group text-center">
-            <div class="list-group-item list-group-item-home">
-                <div>
-                    <h1> <small>【挠挠】今天已经出生</small></div></h1>
-                    <div class="text-primary"><strong>{{ age.day }}天{{ age.hour }}小时{{ age.minutes }}分钟</strong></div>
-                </div>
-                <div class="list-group-item list-group-item-home" ng-repeat="note in latest">
-                    <p class="text-left lead text-info">
-                        <strong>{{note.name}}</strong> <small>发表于 {{note.timestamp * 1000 |  date:'yyyy-MM-dd HH:mm:ss'}}</small>
-                    </p>
-                    <h4 class="text-left text-success" ng-if="note.type=='text'">
-                        {{note.content}}
-                    </h4>
-                    <p ng-if="note.type=='image'">
-                        <img class="img-polaroid" style="width:100%" ng-src="{{IMAGE_HOST + note.image_path}}">
-                        <h5 class="text-left text-success">
-                            {{note.comment}}
-                        </h5>
-                    </p>
+    <div class="scrollable-content list-group">
+        <div class="list-group-item list-group-item-home">
+            <div class="text-center">
+                <h1> <small>【挠挠】今天已经出生</small></h1>
+                <div class="text-primary">
+                    <strong>{{ age.day }}天{{ age.hour }}小时{{ age.minutes }}分钟</strong>
                 </div>
             </div>
         </div>
+        <div class="list-group-item" ng-repeat="note in latest">
+            <p class="text-left lead text-info">
+                <strong>{{note.name}}</strong> <small>发表于 {{note.timestamp * 1000 |  date:'yyyy-MM-dd HH:mm:ss'}}</small>
+            </p>
+            <h4 class="text-left text-success" ng-if="note.type=='text'">
+                        {{note.content}}
+                    </h4>
+            <p ng-if="note.type=='image'">
+                <img class="img-polaroid" style="width:100%" ng-src="{{IMAGE_HOST + note.image_path}}">
+                <h5 class="text-left text-success">
+                            {{note.comment}}
+                        </h5>
+            </p>
+        </div>
     </div>
+</div>
