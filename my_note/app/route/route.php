@@ -1,5 +1,6 @@
 <?php
 
+require "r_handler.php";
 require "r_note.php";
 require "r_user.php";
 

@@ -38,8 +38,29 @@
             </div>
         </div>
         <div ui-if="activeTab == 2">
-            <p class="page-header">直接显示图片库</p>
-            <p>{{lorem}}</p>
+            <div class="list-group">
+                <div class="list-group-item list-group-item" ng-repeat="(index,note) in image_list">
+                    <div class="btn-group pull-right">
+                        <a ui-turn-on='myDropdown{{index}}' class='btn'>
+                            <i class="fa fa-ellipsis-v"></i>
+                        </a>
+                        <ul ui-state="myDropdown{{index}}" class="dropdown-menu" ui-outer-click="Ui.turnOff('myDropdown' + index)" ui-outer-click-if="Ui.active('myDropdown' + index)" role="menu" ui-show="myDropdown{{index}}" ui-turn-off="myDropdown{{index}}">
+                            <li><a ng-click='imageDel(note)'>删除</a></li>
+                            <li class="divider"></li>
+                            <li><a>修改</a></li>
+                        </ul>
+                    </div>
+                    <p style="line-height: 32px">
+                        <img class="img-polaroid" style="width:100%" ng-src="{{IMAGE_HOST + note.image_path}}">
+                        <h5 class="text-left text-success">
+                            {{note.comment}}
+                        </h5>
+                    </p>
+                    <p class="text-info text-right">
+                        <small>{{note.friend_time}}</small>
+                    </p>
+                </div>
+            </div>
         </div>
         <div ui-if="activeTab == 3">
             <p class="page-header">最新记录的语音</p>

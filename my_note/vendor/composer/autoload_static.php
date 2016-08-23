@@ -87,6 +87,7 @@ class ComposerStaticInitaf4e9d1cbccea3eaaa580d86f123f2fa
     public static $classMap = array (
         'Controller\\BaseController' => __DIR__ . '/../..' . '/app/controller/c_base.php',
         'Controller\\Invoker' => __DIR__ . '/../..' . '/app/controller/invoker.php',
+        'Controller\\MessageHandler' => __DIR__ . '/../..' . '/app/controller/c_handler.php',
         'Controller\\NoteController' => __DIR__ . '/../..' . '/app/controller/c_note.php',
         'Controller\\UserController' => __DIR__ . '/../..' . '/app/controller/c_user.php',
         'Model\\BaseModel' => __DIR__ . '/../..' . '/app/model/m_base.php',

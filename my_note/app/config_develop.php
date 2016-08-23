@@ -13,4 +13,4 @@ define("REDISPORT", "6666");
 /** Redis PASSWORD **/
 define("REDISPASSWORD", "Lwlfly002");
 /** Redis DB_INDEX **/
-define("DB_INDEX",0);
+define("DB_INDEX",15);

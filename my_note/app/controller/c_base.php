@@ -68,6 +68,17 @@ class BaseController{
     }
 
     /**
+     * 获取ticket信息
+     */
+    public function getAuthUserId(){
+        if(!empty($GLOBALS['ticket'])){
+            return $GLOBALS['ticket'];
+        }else{
+            throw new Exception("authentication failed", CustomError::AUTH_ERR_CODE);
+        }
+    }
+
+    /**
      * 生成标准的接口返回数据
      * @param string $return_code 错误码
      * @param string $return_msg 错误信息

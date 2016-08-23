@@ -15,9 +15,16 @@ var app = angular.module('MobileAngularUiExamples', [
   'mobile-angular-ui.gestures'
 ])
 
-.run(function($transform) {
+.run(['$transform', '$location', function($transform, $location) {
   window.$transform = $transform;
-})
+
+  //从GET参数中获取身份标识
+  var openid = $location.search()['openid'];
+  if(openid != true && openid != undefined){
+    localStorage.openid = openid;
+  }
+  $location.url($location.path());
+}])
 
 //定义全局变量
 .constant('GLOBAL', {
@@ -29,7 +36,7 @@ var app = angular.module('MobileAngularUiExamples', [
 //httpProvider默认设置
 .run(function($http) {
     //设置接口请求需要的ticket
-    $http.defaults.headers.common = { 'ticket': 'limuyang' };
+    $http.defaults.headers.common = { 'ticket': localStorage.openid };
     //指定Post数据格式
     $http.defaults.headers.post = { 'Content-Type': 'application/json' };
 })

@@ -16,7 +16,7 @@ class UserController extends BaseController{
      * 构造函数
      */
     public function __construct(){
-        $this->redis1 = $this->getRedis(1);
+        $this->redis = $this->getRedis();
         $this->user_status = [
             'STRANGER' => -10,
             'ANONYMOUS' => 0,
@@ -32,11 +32,11 @@ class UserController extends BaseController{
      */
     public function checkStatus($openid, $content = ''){
         $redis_user_key = self::REDIS_USER_PREFIX . $openid;
-        $status = $this->redis1->hget($redis_user_key, 'status');
+        $status = $this->redis->hget($redis_user_key, 'status');
         if($status === NULL){
             //匿名用户
-            $this->redis1->hset($redis_user_key, 'status', $this->user_status['ANONYMOUS']);
-            $this->redis1->hset($redis_user_key, 'comment', $content);
+            $this->redis->hset($redis_user_key, 'status', $this->user_status['ANONYMOUS']);
+            $this->redis->hset($redis_user_key, 'comment', $content);
             return $this->user_status['STRANGER'];
         }
         return intval($status);
@@ -58,8 +58,8 @@ class UserController extends BaseController{
 
         $redis_user_key = self::REDIS_USER_PREFIX . $openid;
         //更新用户信息
-        $this->redis1->hset($redis_user_key, 'status', $this->user_status['APPROVED']);
-        $this->redis1->hset($redis_user_key, 'name', $name);
+        $this->redis->hset($redis_user_key, 'status', $this->user_status['APPROVED']);
+        $this->redis->hset($redis_user_key, 'name', $name);
 
         return $this->success();
     }
@@ -69,7 +69,7 @@ class UserController extends BaseController{
      */
     public function getName($openid){
         $redis_user_key = self::REDIS_USER_PREFIX . $openid;
-        $name = $this->redis1->hget($redis_user_key, 'name');
+        $name = $this->redis->hget($redis_user_key, 'name');
         return $name;
     }
 
@@ -83,14 +83,14 @@ class UserController extends BaseController{
         //查询单条信息
         if(isset($param['field'])){
             $field = $param['field'];
-            $profile = $this->redis1->hget(self::REDIS_MUYANG_KEY, $field);
+            $profile = $this->redis->hget(self::REDIS_MUYANG_KEY, $field);
             if($profile === null){
                 $profile = '';
             }
             return $this->success([ $field => $profile]);
         }
 
-        $profiles = $this->redis1->hgetall(self::REDIS_MUYANG_KEY);
+        $profiles = $this->redis->hgetall(self::REDIS_MUYANG_KEY);
         return $this->success($profiles);
     }
 
@@ -104,8 +104,8 @@ class UserController extends BaseController{
         //检查参数
         $this->checkParam(['field', 'value'], $param);
 
-        $this->redis1->hset(self::REDIS_MUYANG_KEY, $param['field'], $param['value']);
-        $this->redis1->hset(self::REDIS_MUYANG_KEY, 'last_update_time', date('Y-m-d H:i:s', time()));
+        $this->redis->hset(self::REDIS_MUYANG_KEY, $param['field'], $param['value']);
+        $this->redis->hset(self::REDIS_MUYANG_KEY, 'last_update_time', date('Y-m-d H:i:s', time()));
 
         return $this->success();
     }
@@ -117,7 +117,7 @@ class UserController extends BaseController{
         //身份验证
         $this->authenticate();
 
-        $birthday = $this->redis1->hget(self::REDIS_MUYANG_KEY, self::REDIS_MUYANG_BIRTHDAY_FIELD);
+        $birthday = $this->redis->hget(self::REDIS_MUYANG_KEY, self::REDIS_MUYANG_BIRTHDAY_FIELD);
 
         $age_timestamp = time() - strtotime($birthday);
 

@@ -6,14 +6,22 @@ app.factory('noteService', ['$http', function($http) {
         getLatest: function() {
             return $http.get('../note/latest');
         },
-        getTextList: function(openid) {
-            var data = { openid: openid };
-            return $http.post('../note/textList', data)
+        getTextList: function() {
+            return $http.post('../note/textList', {})
         },
-        textDel: function(openid, key) {
+        getImageList: function() {
+            return $http.post('../note/imageList', {})
+        },
+        textDel: function(key) {
             var data = {
-                'openid': openid,
                 'type': 'text',
+                'key': key
+            };
+            return $http.post('../note/delete', data);
+        },
+        imageDel: function(key) {
+            var data = {
+                'type': 'image',
                 'key': key
             };
             return $http.post('../note/delete', data);

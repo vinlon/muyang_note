@@ -4,25 +4,6 @@
  */
 use Controller\NoteController;
 
-$app->group('/handle/', function(){
-    $note = new NoteController();
-
-    //处理文本信息
-    $this->post('text', function($request, $response) use ($note){
-        $param = $request->getParsedBody();
-        $result = $note->handleText($param);
-        return $response->withJson($result, 200, JSON_NUMERIC_CHECK);
-    });
-    //处理图片信息
-    $this->post('image', function($request, $response) use ($note){
-        $param = $request->getParsedBody();
-        $result = $note->handleImage($param);
-        return $response->withJson($result, 200, JSON_NUMERIC_CHECK);
-    });
-
-
-});
-
 $app->group('/note/', function(){
     $note = new NoteController();
 
@@ -30,6 +11,13 @@ $app->group('/note/', function(){
     $this->post('textList', function($request, $response) use ($note){
         $param = $request->getParsedBody();
         $result = $note->getTextList($param);
+        return $response->withJson($result, 200, JSON_NUMERIC_CHECK);
+    });
+
+    //获取图片日志列表
+    $this->post('imageList', function($request, $response) use ($note){
+        $param = $request->getParsedBody();
+        $result = $note->getImageList($param);
         return $response->withJson($result, 200, JSON_NUMERIC_CHECK);
     });
 
