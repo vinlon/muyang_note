@@ -51,14 +51,11 @@
                         </ul>
                     </div>
                     <p style="line-height: 32px">
-                        <img class="img-polaroid" style="width:100%" ng-src="{{IMAGE_HOST + note.image_path}}">
                         <h5 class="text-left text-success">
-                            {{note.comment}}
+                            {{note.comment}} <small class="text-primary">【{{note.friend_time}}】</small>
                         </h5>
                     </p>
-                    <p class="text-info text-right">
-                        <small>{{note.friend_time}}</small>
-                    </p>
+                    <img class="img-polaroid" style="width:100%" ng-src="{{IMAGE_HOST + note.image_path}}">
                 </div>
             </div>
         </div>

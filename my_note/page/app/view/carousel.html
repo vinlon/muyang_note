@@ -1,17 +1,12 @@
 <div ui-content-for="title">
-  <span>Carousel with $drag</span>
+    <span>我的图库</span>
 </div>
-
-<div class="carousel">
-  <div class="carousel-inner">
-    <div class="carousel-item" 
-        style='background-image: url(img/1.jpg);'>
+<div ng-controller="CarouselCtrl">
+    <div class="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item" ng-repeat="image in image_list">
+                <img class="img-polaroid" style="width:100%" ng-src="{{IMAGE_HOST + image.image_path}}">
+            </div>
+        </div>
     </div>
-    <div class="carousel-item"
-         style='background-image: url(img/2.jpg);'>
-    </div>
-    <div class="carousel-item"
-         style='background-image: url(img/3.jpg);'>
-    </div>
-  </div>
 </div>

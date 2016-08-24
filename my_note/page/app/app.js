@@ -2,7 +2,7 @@
 // Here is how to define your module 
 // has dependent on mobile-angular-ui
 // 
-var app = angular.module('MobileAngularUiExamples', [
+var app = angular.module('MuYangNote', [
   'ngRoute',
   'mobile-angular-ui',
   
