@@ -124,9 +124,9 @@ class MessageHandler extends BaseController
 		$now = time();
 		$this->redis->hset($redis_image_note_key, $now, $value);
 
-		//1分钟内接收到的文本信息作为该图片的描述
+		//10分钟内接收到的文本信息作为该图片的描述
 		$redis_image_waiting_comment_key = self::REDIS_IMAGE_WAITING_COMMENT_PREFIX . $openid;
-		$this->redis->setex($redis_image_waiting_comment_key, 60, $now);
+		$this->redis->setex($redis_image_waiting_comment_key, 60 * 10, $now);
 
 		//添加到最新动态
 		$this->redis->hset(self::REDIS_LATEST_NOTE_KEY, $openid, json_encode([
@@ -136,7 +136,7 @@ class MessageHandler extends BaseController
 			'comment' => ''
 		]));
 
-		$reply = ['reply' => '挠挠：给图片加个备注吧...'];
+		$reply = ['reply' => '挠挠：给图片加个备注吧,只等你十分钟哦。。。'];
 
        	return $this->success($reply);
     }
