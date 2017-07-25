@@ -143,6 +143,7 @@ class NoteController extends BaseController
 			$name = $this->user->GetName($openid);
 			$item['name'] = $name;
 			$note = json_decode($note_json, true);
+			$note['time'] = date('Y-m-d H:i:s', $note['timestamp']);
 			$item = array_merge($item, $note);
 
 			$time_series[] = $note['timestamp'];

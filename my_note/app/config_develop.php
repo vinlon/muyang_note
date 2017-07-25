@@ -7,10 +7,10 @@ define("LOG_ENABLE", false);
 
 
 /** Redis HOST **/
-define("REDISHOSTNAME", "114.112.89.90");
+define("REDISHOSTNAME", "wenlong.me");
 /** Redis PORT **/
-define("REDISPORT", "6666");
+define("REDISPORT", "6379");
 /** Redis PASSWORD **/
-define("REDISPASSWORD", "Lwlfly002");
+define("REDISPASSWORD", "6yhn3edc7ujm9ol.");
 /** Redis DB_INDEX **/
-define("DB_INDEX",15);
+define("DB_INDEX",1);

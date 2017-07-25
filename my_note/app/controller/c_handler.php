@@ -156,7 +156,7 @@ class MessageHandler extends BaseController
 				'title' => '成长日记',
 				'description' => '点击查看成长日志',
 				'image' => '',
-				'url' => 'http://ab.aikaka.com.cn/liwenlong/my_note/page/index.html#/?openid=' . $openid
+				'url' => 'https://mynote.wang/muyang_note/my_note/page/index.html#/?openid=' . $openid
 			];
 		}
 		return '';
