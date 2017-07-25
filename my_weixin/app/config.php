@@ -24,15 +24,15 @@ define('AES_KEY', 'lwaYEyl6xUHzKrJu9CbNydok1GgPp0j9jEDQIFYk66K');
 
 /** FOR全局异常处理 **/
 /** 项目名称 **/
-define('PROJECT_NAME','SlimFastApi');
+define('PROJECT_NAME','WENLONG.MY_WEIXIN');
 /** 项目负责人邮箱 **/
 define('PROJECT_OWNER','liwenlong@aikaka.cc');
 
 /** FOR服务定义 */
 /** 服务所属域 **/
-define('SERVICE_DOMAIN','SlimFastApi');
+define('SERVICE_DOMAIN','WENLONG');
 /** 服务命名空间 **/
-define('SERVICE_NAMESPACE','TEST');
+define('SERVICE_NAMESPACE','MY_WEIXIN');
 /**自定义错误前缀 */
 define('ERROR_PREFIX','x200'); //x：项目编号
 

@@ -219,6 +219,8 @@ class BaseController{
             $curl->setHeader($key, $value);
         }
         $curl->setHeader("Content-type", "application/json");
+        $curl->setOpt(CURLOPT_SSL_VERIFYPEER, FALSE);
+        $curl->setOpt(CURLOPT_SSL_VERIFYHOST, FALSE);
         $curl->post($url, $json);
         $curl->close();
         if($curl->error){

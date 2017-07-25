@@ -33,12 +33,15 @@ class MessageController extends BaseController{
                 $headers = ['ticket' => TOKEN];
                 $json = $this->postJSON($handler, json_encode($message), $headers);
                 $result = json_decode($json, true);
+                $this->addInfo(date('Y-m-d H:i:s') . "\t" . $handler . "\t" . $json, 'handle_fail');
                 if($result['return_code'] === 200){
                     $reply = $result['data'];
                 }else{
+                    $this->addInfo(date('Y-m-d H:i:s') . "\t" . $handler . "\t" . $json, 'handle_fail');
                     $reply = '挠挠：爸爸的程序出错了！';
                 }
             } catch (Exception $e) {
+                $this->addInfo(date('Y-m-d H:i:s') . "\t" . $handler . "\t" . $e->getMessage(), 'handle_fail');
                 $reply = '挠挠：爸爸的程序出错了！';
             }
         }else{
